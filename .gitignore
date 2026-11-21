@@ -1,0 +1,9 @@
+# Windows Scratch / Temp Artifacts
+scratch/
+*.tmp
+*.log
+*.png
+*.json
+!package.json
+.DS_Store
+Thumbs.db
