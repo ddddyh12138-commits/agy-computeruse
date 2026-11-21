@@ -6,6 +6,40 @@
 
 ---
 
+## 一键部署（AI Agent & 人类通用）
+
+> [!TIP]
+> **如果你把本仓库链接发给了你的 AI Agent（Antigravity / Cursor / Claude Code 等），AI 可直接按以下步骤全自动完成部署并跑通：**
+
+```powershell
+# 1. 克隆本仓库到本地临时/项目目录
+git clone https://github.com/ddddyh12138-commits/agy-computeruse.git "$env:USERPROFILE\.gemini\antigravity\scratch\agy-computeruse"
+
+# 2. 运行一键幂等安装脚本（自动安装 agent-desktop、部署技能与脚本、注册 MCP 并自检）
+powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.gemini\antigravity\scratch\agy-computeruse\install.ps1"
+```
+
+安装脚本 `install.ps1` 会自动完成以下 4 件事：
+1. **安装底层执行器**：检测本机是否已安装 `agent-desktop` CLI（`vercel-labs/agent-desktop`），若未安装则自动运行 `npm install -g agent-desktop`（需本机有 Node.js >= 18）。
+2. **部署技能与工具链**：将 `SKILL.md`、`references/`、`scripts/` 安装至 `%USERPROFILE%\.gemini\config\skills\open-computer-use`（可通过 `-SkillDir` 自定义）。
+3. **注册 MCP Server**：自动在 `%USERPROFILE%\.gemini\antigravity\mcp_config.json` 中安全合并写入 `agent-desktop`（`agent-desktop mcp --headed`），不覆盖你已有的其他 MCP 配置（如用其他客户端可加 `-SkipMcpConfig` 并参考下方手动配置）。
+4. **运行全链路自检**：自动调用 `agent-desktop status` 并校验 3 个 PowerShell 脚本语法，输出 `READY_TO_USE` 即代表就绪（若首次注册 MCP，重载一次 AI 客户端即可）。
+
+### 其他客户端手动 MCP 配置片段（如 Cursor / Claude Desktop）
+
+```json
+{
+  "mcpServers": {
+    "agent-desktop": {
+      "command": "agent-desktop",
+      "args": ["mcp", "--headed"]
+    }
+  }
+}
+```
+
+---
+
 ## 核心特性
 
 1. **双引擎路由与单进程闭环提速（3–5× 提速）**
@@ -16,7 +50,7 @@
 2. **高精度零遮挡坐标定位工具链 ([scripts/som_grid.ps1](scripts/som_grid.ps1))**
    - **28px 外置标尺边框**：坐标文字与刻度线严格居中对齐网格线，彻底消除传统网格标签落在格内导致的 1 列（50px）误读，且不遮挡原图边缘。
    - **`-Scale 2|3` 无模糊像素放大**：`NearestNeighbor` 放大配合真实屏幕坐标标尺，精准拾取 `<15px` 3D 控制点与图标。
-   - **`-Overview` 低分概览模式**：自动将 `2560×1600` 降采样至 `0.5x`（像素量降至 1/4）并保留真实屏幕坐标标尺，大幅加快 VLM 读图速度。
+   - **`-Overview` 低分概览模式**：自动将整屏图降采样至 `0.5x`（像素量降至 1/4）并保留真实屏幕坐标标尺，大幅加快 VLM 读图速度。
    - **`-Regions` 多 ROI 单次拼图**：一次调用将工具栏、3D 视口、属性面板等多个局部区域带独立标尺拼接为单张图片。
    - **`-Markers` 十字准星预览**：高风险点击前在图上标注拟落点十字准星与坐标确认。
 
@@ -34,6 +68,7 @@
 
 ```text
 agy-computeruse/
+├── install.ps1                    # 一键全自动部署与自检脚本
 ├── SKILL.md                       # 主控协议（引擎路由、三层坐标模型、输入决策树、熔断规则）
 ├── references/
 │   ├── batch_recipes.md           # desktop_batch 5 套黄金 JSON 模板
@@ -48,17 +83,7 @@ agy-computeruse/
 
 ---
 
-## 快速安装与使用
-
-### 1. 安装为 Antigravity / AI Agent 技能
-
-将本项目克隆或复制到本地技能目录（例如 `~/.gemini/config/skills/open-computer-use/`）：
-
-```powershell
-git clone https://github.com/ddddyh12138-commits/agy-computeruse.git "$env:USERPROFILE\.gemini\config\skills\open-computer-use"
-```
-
-### 2. 配套工具独立调用示例
+## 配套工具独立调用示例
 
 ```powershell
 # 1) 生成全局 0.5x 概览图（保留真实屏幕坐标外置标尺）
