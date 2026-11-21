@@ -1,4 +1,4 @@
-# Windows Hybrid Computer Use Skill (`win-hybrid-computer-use`)
+# Windows Hybrid Computer Use Skill (`agy-computeruse`)
 
 一套面向 **Windows 桌面及复杂 3D / 工业软件（如 FlexSim、CAD、Qt 桌面端）** 的 AI Agent Computer Use 实战技能与零依赖 PowerShell 工具链。
 
@@ -33,7 +33,7 @@
 ## 目录结构
 
 ```text
-win-hybrid-computer-use/
+agy-computeruse/
 ├── SKILL.md                       # 主控协议（引擎路由、三层坐标模型、输入决策树、熔断规则）
 ├── references/
 │   ├── batch_recipes.md           # desktop_batch 5 套黄金 JSON 模板
@@ -55,7 +55,7 @@ win-hybrid-computer-use/
 将本项目克隆或复制到本地技能目录（例如 `~/.gemini/config/skills/open-computer-use/`）：
 
 ```powershell
-git clone https://github.com/ddddyh/win-hybrid-computer-use.git "$env:USERPROFILE\.gemini\config\skills\open-computer-use"
+git clone https://github.com/ddddyh/agy-computeruse.git "$env:USERPROFILE\.gemini\config\skills\open-computer-use"
 ```
 
 ### 2. 配套工具独立调用示例
