@@ -1,6 +1,6 @@
 # Windows Hybrid Computer Use Skill (`agy-computeruse`)
 
-一套面向 **Windows 桌面及复杂 3D / 工业软件（如 FlexSim、CAD、Qt 桌面端）** 的 AI Agent Computer Use 实战技能与零依赖 PowerShell 工具链。
+一套基于开源项目 **[vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop)** 深度优化与实战调教的 **Windows 桌面及复杂 3D / 工业软件（如 FlexSim、CAD、Qt 桌面端）** AI Agent Computer Use 增强技能与零依赖 PowerShell 工具链。
 
 本项目从真实复杂 3D 建模（FlexSim 多 AGV 与分拣仿真）长程实操痛点中提炼重构而成，核心解决传统 Computer Use 在 Windows 上普遍存在的**高延迟、Session 0 隔离失效、1.5x/2x 高分屏目测偏移、Qt 中文 UIA 崩溃、中文输入法吞键与静默空操作**问题。
 
