@@ -55,7 +55,7 @@ agy-computeruse/
 将本项目克隆或复制到本地技能目录（例如 `~/.gemini/config/skills/open-computer-use/`）：
 
 ```powershell
-git clone https://github.com/ddddyh/agy-computeruse.git "$env:USERPROFILE\.gemini\config\skills\open-computer-use"
+git clone https://github.com/ddddyh12138-commits/agy-computeruse.git "$env:USERPROFILE\.gemini\config\skills\open-computer-use"
 ```
 
 ### 2. 配套工具独立调用示例
