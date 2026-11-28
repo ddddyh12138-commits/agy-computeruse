@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  One-click idempotent installer for agy-computeruse (Windows Hybrid Computer Use Skill + FlexSim Automation).
+  One-click idempotent installer for agy-computer-use (Windows Hybrid Computer Use Skill + FlexSim Automation).
   Installs agent-desktop CLI, deploys open-computer-use & flexsim-automation skills + scripts,
   optionally registers the agent-desktop MCP server, and runs self-checks.
 #>
@@ -123,5 +123,5 @@ if (-not $SkipFlexSimSkill -and (Test-Path $FlexSimSkillDir)) {
     }
 }
 
-Write-Host "`nREADY_TO_USE: agy-computeruse deployed successfully!" -ForegroundColor Cyan
+Write-Host "`nREADY_TO_USE: agy-computer-use deployed successfully!" -ForegroundColor Cyan
 Write-Host "Note: Restart or reload your AI client's MCP servers if 'agent-desktop' was newly added."

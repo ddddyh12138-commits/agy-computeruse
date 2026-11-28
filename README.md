@@ -1,4 +1,8 @@
-# Windows Hybrid Computer Use Skill (`agy-computeruse`)
+<p align="center">
+  <strong>简体中文</strong> | <a href="README.en.md">English</a>
+</p>
+
+# Windows Hybrid Computer Use Skill (`agy-computer-use`)
 
 一套基于开源项目 **[vercel-labs/agent-desktop](https://github.com/vercel-labs/agent-desktop)** 深度优化与实战调教的 **Windows 桌面及复杂 3D / 工业软件（FlexSim 2022、CAD、Qt 桌面端）** AI Agent Computer Use 增强技能与零依赖工具链。
 
@@ -13,10 +17,10 @@
 
 ```powershell
 # 1. 克隆本仓库到本地临时/项目目录
-git clone https://github.com/ddddyh12138-commits/agy-computeruse.git "$env:USERPROFILE\.gemini\antigravity\scratch\agy-computeruse"
+git clone https://github.com/ddddyh12138-commits/agy-computer-use.git "$env:USERPROFILE\.gemini\antigravity\scratch\agy-computer-use"
 
 # 2. 运行一键幂等安装脚本（自动安装 agent-desktop、部署双技能与脚本、注册 MCP 并自检）
-powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.gemini\antigravity\scratch\agy-computeruse\install.ps1"
+powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.gemini\antigravity\scratch\agy-computer-use\install.ps1"
 ```
 
 安装脚本 `install.ps1` 会自动完成以下 4 件事：
@@ -57,7 +61,7 @@ powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.gemini\antigravity\s
 ## 目录结构
 
 ```text
-agy-computeruse/
+agy-computer-use/
 ├── install.ps1                                # 一键全自动部署与全链路自检脚本
 ├── SKILL.md                                   # 通用桌面主控协议（含 FlexSim 路由联动）
 ├── references/
@@ -79,7 +83,8 @@ agy-computeruse/
 ├── docs/
 │   └── flexsim-best-practices.md              # Antigravity 四层路由与 FlexSim 最佳实践指南
 ├── LICENSE                                    # MIT License
-└── README.md
+├── README.md                                  # 简体中文说明
+└── README.en.md                               # English documentation
 ```
 
 ---
