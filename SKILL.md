@@ -1,7 +1,8 @@
 ---
 name: open-computer-use
 description: >-
-  Primary Windows desktop and hybrid 3D/CAD GUI automation skill. Orchestrates
+  Primary Windows desktop and hybrid 3D/CAD GUI automation skill (including
+  FlexSim 2022 `.fsm` coursework modeling and verification). Orchestrates
   agent-desktop MCP (Session 1 batch execution, UIA snapshots, screen=0 capture,
   lifecycle waits) as the primary engine with open-computer-use MCP as fallback,
   powered by zero-dependency PowerShell SoM outer-ruler grids, UTF-8 UIA parsing,
@@ -9,6 +10,8 @@ description: >-
 ---
 
 # Windows Desktop & Hybrid 3D GUI Automation
+
+> **FlexSim 2022 专属路由提示**：当目标应用为 **FlexSim 2022（`.fsm`/`.fsx`）** 时，请优先加载并使用 `flexsim-automation` 技能及其 `scripts/` 下的专用双通道工具链（`flexsim_env_probe.ps1`、`flexsim_fsx_inspector.py`、`flexsim_script_runner.py`、`flexsim_gui_helper.ps1`）。
 
 ## 1. Engine Routing & Concurrency Rules
 
@@ -26,14 +29,14 @@ description: >-
 
 ## 3. Text & Numeric Input Decision Tree (IME & Qt Safe)
 
-1. **Priority 1 (Unique UIA `@ref`)**: `desktop_set_value` (bypasses focus, clipboard, and Chinese IME).
+1. **Priority 1 (Unique UIA `@ref`)**: `desktop_set_value` (bypasses focus, clipboard, and Chinese IME). See `references/windows_uia_semantics.md` for twin-ref `AMBIGUOUS_TARGET` and `post_action_verification` reformatting rules.
 2. **Priority 2 (Chinese / Long Strings / Standard Fields)**: Inside `desktop_batch`: `clipboard-set(text)` -> `wait(80)` -> `mouse-click(xy)` -> `wait(80)` -> `press(ctrl+a)` -> `press(ctrl+v)` -> `press(return)` -> `wait(150)`.
 3. **Priority 3 (Qt SpinBoxes where `ctrl+v` fails)**: `mouse-click(xy, count=2)` -> `press(ctrl+a)` -> `press(backspace)` -> plain digit/minus `press` sequence. If single-letter hotkeys (`a`/`s`/`q`/`-`) are swallowed by Chinese IME, click UI buttons instead or toggle English IME first.
 
 ## 4. Closed-Loop Batching, Focus & Circuit Breaker
 
 - **Single-Process Closed Loop**: Pack deterministic multi-step sequences + `wait` + trailing `screenshot(screen=0)` into one `desktop_batch(stop_on_error=true)` call (`<64` commands). See `references/batch_recipes.md`.
-- **Pre-Batch Focus & UIPI Guard**: Verify `is_focused: true` via `desktop_list_windows()`. If unfocused, click the app's taskbar button (`desktop_snapshot(surface="taskbar", include_bounds=true)` + `parse_uia.ps1 -Mode taskbar`) or an uncovered app region. If `E_ACCESSDENIED` / elevated popup (UIPI) blocks input, stop and ask the user to dismiss it.
+- **Pre-Batch Focus, Minimized Restore & UIPI Guard**: Verify `is_focused: true` via `desktop_list_windows()`. If minimized (`offscreen`), run `desktop_restore` first (`references/windows_uia_semantics.md`). If unfocused, click the app's taskbar button (`desktop_snapshot(surface="taskbar", include_bounds=true)` + `parse_uia.ps1 -Mode taskbar`) or an uncovered app region. If `E_ACCESSDENIED` / elevated popup (UIPI) blocks input, stop and ask the user to dismiss it.
 - **2-Try Gesture Rule & 3-Turn Circuit Breaker**: If a 3D canvas drag/snap fails twice, switch to numeric/Eyedropper controls (`references/cad_3d_patterns.md`). If `scripts/verify_diff.ps1` reports `NO_CHANGE` twice in a row, **halt blind clicking** and run full diagnostics (`desktop_list_windows` + `desktop_screenshot(screen=0)` for hidden modals, focus loss, IME, or sticky toolbar icons).
 - **Checkpoints, Undo & Rolling Scratch Hygiene**: Press `ctrl+s` before high-risk linking/runs; press `ctrl+z` immediately on misdrops (critical for quota-limited Express apps). Store rolling artifacts in `<ArtifactDir>/scratch/gui/` (`prev_screen.png`, `latest_screen.png`, `latest_grid.png`, `diff_crop.png`, `latest_uia.json`).
 
@@ -42,4 +45,7 @@ description: >-
 - **`scripts/som_grid.ps1`**: Outer 28px zero-occlusion ruler (`-Step`), `-Scale 2|3` nearest-neighbor zoom, `-Overview` (`0.5x` fast full-screen), `-Regions "name:x0,y0,x1,y1,step;..."` multi-ROI stitch, `-Markers "x,y:label;..."` crosshair preview, and `-SnapshotJson` SoM boxes.
 - **`scripts/parse_uia.ps1`**: Clean UTF-8 parser for `desktop_snapshot(include_bounds=true)` files with `-NameFilter` regex, `-Mode all|panel|dialog|taskbar`, and `-BatchClick` JSON output.
 - **`scripts/verify_diff.ps1`**: Sub-200ms `LockBits` pixel diff (`-Before` vs `-After`) outputting `CHANGED_PCT`, `DIFF_BBOX`, `STATUS=NO_CHANGE|CHANGED|MAJOR_CHANGE`, and optional `-CropDiffPath`.
-- **References**: Read `references/batch_recipes.md` for copy-ready `desktop_batch` JSON templates and `references/cad_3d_patterns.md` for 3D/FlexSim/CAD rules.
+- **References**:
+  - `references/windows_uia_semantics.md` — Windows UIA twin-ref ambiguity (`AMBIGUOUS_TARGET`), `STALE_REF`, `delivered_unverified` / reformatting on `desktop_set_value`, minimized window `offscreen` gotcha & `desktop_restore`, foreground input requirements, UIPI elevation, Chromium `timeout_ms` settle, and blocked system shortcuts.
+  - `references/batch_recipes.md` — Copy-ready `desktop_batch` JSON templates.
+  - `references/cad_3d_patterns.md` — 3D/CAD patterns and FlexSim 2022 (`.fsm`) coursework rules (A-key vs S-key port connections, worker/task-allocator isolation, `Model.find(...)` & `current.centerObjects[2]`, wall-clock ms vs simulation seconds, and disk timestamp verification).
